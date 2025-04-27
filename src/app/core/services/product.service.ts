@@ -10,9 +10,18 @@ import { environment } from '../../../environments/environment';
 export class ProductService {
   private http = inject(HttpClient);
 
-  getAll() {
-    return this.http.get<ApiResponse<Product[]>>(`${environment.api}/v1/products?active=true`);
+  getAll(active?: boolean) {
+    let query = '';
+  
+    if (active === true) {
+      query = '?active=true';
+    } else if (active === false) {
+      query = '?active=false';
+    }
+  
+    return this.http.get<ApiResponse<Product[]>>(`${environment.api}/v1/products${query}`);
   }
+  
 
   create(request: SaveProduct) {
     return this.http.post<ApiResponse<Product>>(`${environment.api}/v1/products`, request);
@@ -26,4 +35,8 @@ export class ProductService {
     return this.http.delete<ApiResponse<any>>(`${environment.api}/v1/products/${id}/inactive`);
   }
 
+  getById(id: number) {
+    return this.http.get<ApiResponse<Product>>(`${environment.api}/v1/products/${id}`);
+  }
+  
 }

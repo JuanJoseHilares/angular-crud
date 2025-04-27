@@ -4,13 +4,28 @@
             <mat-icon>filter_list</mat-icon>
         </button>
 
-        <input type="text" placeholder="Buscar producto" style="padding: 0.5rem;">
+        <input type="text" placeholder="Buscar producto Por ID" style="padding: 0.5rem;" [(ngModel)]="searchValue"
+            (keyup.enter)="searchProduct()">
+
+
     </div>
 
     <button type="button" mat-flat-button (click)="openProductDlg()">
         <mat-icon>add</mat-icon>
         Nuevo producto
     </button>
+    <div class="flex justify-end space-x-2 mb-4">
+        <button mat-button (click)="filterProducts()" color="primary">
+            Todos
+        </button>
+        <button mat-button (click)="filterProducts(true)" color="accent">
+            Activos
+        </button>
+        <button mat-button (click)="filterProducts(false)" color="warn">
+            Inactivos
+        </button>
+    </div>
+    
 </div>
 
 <div class="w-full overflow-x-auto">
@@ -22,6 +37,12 @@
             <td mat-cell *matCellDef="let element">
                 <img [src]="element.imageUrl" alt="Product image" height="32" width="32">
             </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
         <!-- Name Column -->
@@ -62,5 +83,11 @@
 
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let row; columns: columns;" (dblclick)="openProductDlg(row)"></tr>
+        <tr *ngIf="dataSource.length === 0">
+            <td [attr.colspan]="columns.length" class="text-center py-4">
+                No se encontraron productos.
+            </td>
+        </tr>
+
     </table>
 </div>
